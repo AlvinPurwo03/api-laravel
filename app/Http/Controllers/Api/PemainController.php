@@ -107,8 +107,14 @@ class PemainController extends Controller
         }
 
         try {
-            $path = $request->file('foto')->store('public/pemain'); //menyimpan gambar
             $pemain = Pemain::findOrFail($id);
+
+            if ($request->hasFile('foto')) {
+                Storage::delete($pemain->foto); //menghapus gambar lama / foto lama
+                $path = $request->file('foto')->store('public/pemain');
+                $pemain->foto = $path;
+            }
+
             $pemain->nama_pemain = $request->nama_pemain;
             $pemain->tgl_lahir = $request->tgl_lahir;
             $pemain->harga_pasar = $request->harga_pasar;

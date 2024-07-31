@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FanController;
 use App\Http\Controllers\Api\KlubController;
 use App\Http\Controllers\Api\LigaController;
@@ -18,11 +19,19 @@ Route::get('/user', function (Request $request) {
 // Route::put('liga/{id}', [LigaController::class, 'update']); //mengedit liga
 // Route::delete('liga/{id}', [LigaController::class, 'destroy']); //menghapus liga
 
-// Route Liga Matic
-Route::resource('liga', LigaController::class)->except('create', 'edit');
-// Route Liga Matic
-Route::resource('klub', KlubController::class)->except('create', 'edit');
-// Route Pemain Matic
-Route::resource('pemain', PemainController::class)->except('create', 'edit');
-// Route Pemain Matic
-Route::resource('fan', FanController::class)->except('create', 'edit');
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+
+    // Route Liga Matic
+    Route::resource('liga', LigaController::class)->except('create', 'edit');
+    // Route Liga Matic
+    Route::resource('klub', KlubController::class)->except('create', 'edit');
+    // Route Pemain Matic
+    Route::resource('pemain', PemainController::class)->except('create', 'edit');
+    // Route Pemain Matic
+    Route::resource('fan', FanController::class)->except('create', 'edit');
+});
+
+//Auth Route
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);

@@ -95,11 +95,13 @@ class KlubController extends Controller
 
         try {
             $klub = Klub::findOrFail($id);
+
             if ($request->hasFile('logo')) {
                 Storage::delete($klub->logo); //menghapus gambar lama / foto lama
                 $path = $request->file('logo')->store('public/klub');
                 $klub->logo = $path;
             }
+
             $klub->nama_klub = $request->nama_klub;
             $klub->id_liga = $request->id_liga;
             $klub->save();
